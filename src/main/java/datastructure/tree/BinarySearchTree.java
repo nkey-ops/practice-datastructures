@@ -149,6 +149,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return curr == null ? Optional.empty() : Optional.of(p);
     }
 
+    /**
+     * Returns string representation of the tree in ascending order 
+     * Time Complexity O(n)
+     */
     public String inorder() {
         return inorder(root, new StringBuilder());
     }
@@ -159,6 +163,44 @@ public class BinarySearchTree<T extends Comparable<T>> {
         inorder(node.left, builder);
         builder.append(node.data).append(", ");
         inorder(node.right, builder);
+
+        return builder.toString();
+    }
+
+    /**
+     * Returns string representation of the tree printing in order 
+     * first parent then left and then right node 
+     * Time Complexity O(n)
+     */
+    public String preorder() {
+        return preorder(root, new StringBuilder());
+    }
+
+    private String preorder(Node<T> node, StringBuilder builder) {
+        if (node == null) return "";
+
+        builder.append(node.data).append(", ");
+        this.preorder(node.left, builder);
+        preorder(node.right, builder);
+
+        return builder.toString();
+    }
+
+    /**
+     * Returns string representation of the tree using postorder traversal
+     * using principal Left-Right-Node 
+     * Time Complexity O(n)
+     */
+    public String postorder() {
+        return postorder(root, new StringBuilder());
+    }
+
+    private String postorder(Node<T> node, StringBuilder builder) {
+        if (node == null) return "";
+
+        this.postorder(node.left, builder);
+        postorder(node.right, builder);
+        builder.append(node.data).append(", ");
 
         return builder.toString();
     }
@@ -181,9 +223,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
             integers.add(nextInt);
         }
 
-        
+
         System.out.println(tree);
-        System.out.println(tree.inorder());
+        System.out.println("Inorder " + tree.inorder());
+        System.out.println("Preorder " + tree.preorder());
+        System.out.println("Postorder " + tree.postorder());
 
         for (int nextInt : integers) {
             System.out.println("Delete " + nextInt);
