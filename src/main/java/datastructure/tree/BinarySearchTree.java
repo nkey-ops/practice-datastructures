@@ -6,8 +6,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class BinarySearchTree<T extends Comparable<T>> {
-
-    private Node<T> root;
+    protected Node<T> root;
 
     public static class Node<T> {
         public T data;
@@ -131,7 +130,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return result;
     }
 
-    private Optional<Node<T>> searchParent(Node<T> curr, T v) {
+    protected Optional<Node<T>> searchParent(T v) {
+        if(v == null) return Optional.empty();
+        
+        return searchParent(root, v);
+    }
+    
+    protected Optional<Node<T>> searchParent(Node<T> curr, T v) {
         if (curr == null)
             return Optional.empty();
 
