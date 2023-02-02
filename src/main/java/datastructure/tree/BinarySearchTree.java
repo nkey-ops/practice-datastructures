@@ -8,41 +8,17 @@ import java.util.Set;
 public class BinarySearchTree<T extends Comparable<T>> {
     protected Node<T> root;
 
-    public static class Node<T> {
-        public T data;
-        public Node<T> left;
-        public Node<T> right;
-
-        public Node(T value) {
-            this.data = value;
-        }
-
-        @Override
-        public String toString() {
-            return data.toString();
-        }
-
-        private StringBuilder toString(StringBuilder prefix, boolean isTail, StringBuilder sb) {
-            if (right != null) {
-                right.toString(new StringBuilder().append(prefix).append(isTail ? "│   " : "    "), false, sb);
-            }
-            sb.append(prefix).append(isTail ? "└── " : "┌── ").append(data.toString()).append("\n");
-            if (left != null) {
-                left.toString(new StringBuilder().append(prefix).append(isTail ? "    " : "│   "), true, sb);
-            }
-            return sb;
-        }
-    }
+    
 
     public void insert(T value) {
         if (root == null) {
             root = new Node<>(value);
         } else {
-            insert(root, value);
+           root = insert(root, value);
         }
     }
 
-    private Node<T> insert(Node<T> n, T v) {
+    protected Node<T> insert(Node<T> n, T v) {
         if (n == null)
             return new Node<>(v);
 
@@ -51,7 +27,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
         else if (v.compareTo(n.data) > 0)
             n.right = insert(n.right, v);
         else
-            return n;
+            return null;
 
         return n;
     }
