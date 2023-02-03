@@ -1,2 +1,2 @@
-Java based implementations of data stratures that were shown at javatpoint's cource  
+Java-based implementations of data structures that were shown in javatpoint's course
 https://www.javatpoint.com/data-structure-tutorial
