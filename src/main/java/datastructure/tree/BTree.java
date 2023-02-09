@@ -25,8 +25,8 @@ public class BTree<T extends Comparable<T>> {
     }
 
     public BTree(int order) {
-        if(order < 2 )
-            throw  new IllegalArgumentException("Order cannot be lower than 2");
+        if (order < 2)
+            throw new IllegalArgumentException("Order cannot be lower than 2");
         this.order = order;
     }
 
@@ -115,21 +115,55 @@ public class BTree<T extends Comparable<T>> {
         }
 
         public boolean containsKey(T key) {
-            if(key == null) return false;
+            if (key == null) return false;
 
             for (int i = 0; i < nKeys; i++) {
-                if(key.compareTo(keys[i]) == 0)
+                if (key.compareTo(keys[i]) == 0)
                     return true;
             }
-            
+
             return false;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "keys=" + Arrays.toString(Arrays.copyOf(keys, nKeys)) +
+                    ", nodes=" + Arrays.toString(Arrays.copyOf(nodes, nKeys + 1)) +
+                    '}';
         }
     }
 
+    public boolean contains(T key) {
+        if (root == null) return false; //1
+
+        return contains(root, key);
+
+    }
+
+    private boolean contains(Node<T> node, T key) {
+        Objects.requireNonNull(node);
+
+        if (key == null) return false; 
+
+        for (int i = 0; i <= node.nKeys; i++) { 
+            T k = node.keys[i];
+
+            if (!node.isLeaf && (i == node.nKeys || key.compareTo(k) < 0)) {
+                node = node.nodes[i];
+                i = -1;
+            } else if (k != null && key.compareTo(k) == 0)
+                return true;
+        }
+
+        return false;
+    }
+
+
     /**
-     * Inserting an element on a B-tree consists of two events: 
-     * <br> searching the appropriate node to insert the element 
-     * <br> and splitting the node if required. 
+     * Inserting an element on a B-tree consists of two events:
+     * <br> searching the appropriate node to insert the element
+     * <br> and splitting the node if required.
      * <br> Insertion operation always takes place in the bottom-up approach.
      */
     public boolean add(T value) {
@@ -147,7 +181,7 @@ public class BTree<T extends Comparable<T>> {
         Node<T> leaf = null;
 
         //if node is root and leaf skip a search for the leaf node
-        if(node == root && node.isLeaf ) {
+        if (node == root && node.isLeaf) {
             leaf = node;
             node = null;
         } else {
@@ -165,20 +199,20 @@ public class BTree<T extends Comparable<T>> {
         }
 
         Objects.requireNonNull(leaf); //we didn't find leaf node !! impossible
-            
-       // Insert the elements in increasing order.
+
+        // Insert the elements in increasing order.
         if (leaf.isLeaf && !leaf.add(key))
             return null;  //return null -> presumably object was already in the tree
 
         /* If the node is full
          * split at the median.
          * Push the median key upwards and make the left keys as a left child and the right keys as a right child.*/
-        if (leaf.isFull() && !split(leaf, node)) 
+        if (leaf.isFull() && !split(leaf, node))
             return null; //return null -> presumably object was already in the tree !! impossible
 
         // if it's a root and full node -> split it 
-        if(node == root && node.isFull() && !split(node, null)) 
-            return  null;
+        if (node == root && node.isFull() && !split(node, null))
+            return null;
 
         return node;
     }
@@ -254,6 +288,18 @@ public class BTree<T extends Comparable<T>> {
         b.show();
         b.add(23);
         b.show();
+
+        
+        System.out.println("Contains 8 true: " + b.contains(8));
+        System.out.println("Contains 15 true: " + b.contains(15));
+        System.out.println("Contains 23 true: " + b.contains(23));
+        System.out.println("Contains 1 false: " + b.contains(1));
+        System.out.println("Contains 13 false: " + b.contains(13));
+        System.out.println("Contains 24 false: " + b.contains(24));
+        
+        
+        
     }
+
 
 }
